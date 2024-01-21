@@ -1,4 +1,4 @@
-package user_handler
+package handlers
 
 import (
 	db_const "go_server/config/db"

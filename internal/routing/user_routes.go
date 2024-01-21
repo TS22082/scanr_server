@@ -3,7 +3,7 @@
 package router
 
 import (
-	"go_server/internal/handlers/user_handler"
+	"go_server/internal/handlers"
 	"go_server/internal/middleware"
 	"time"
 
@@ -31,9 +31,9 @@ func SetupUserRoutes(app *fiber.App) {
 
 	// POST endpoint for creating a new user.
 	// The handler for this endpoint is defined in the user_handler package.
-	userGroup.Post("/", user_handler.CreateNewUser)
+	userGroup.Post("/", handlers.CreateNewUser)
 
 	// POST endpoint for verifying a new user.
 	// The handler for this endpoint is defined in the user_handler package.
-	userGroup.Post("/verify/:token", user_handler.VerifyNewUser)
+	userGroup.Post("/verify/:token", handlers.VerifyNewUser)
 }

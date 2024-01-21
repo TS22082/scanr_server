@@ -1,4 +1,4 @@
-package auth_handler
+package handlers
 
 import (
 	msg_const "go_server/config/messages"

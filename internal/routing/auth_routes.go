@@ -1,7 +1,7 @@
 package router
 
 import (
-	"go_server/internal/handlers/auth_handler"
+	"go_server/internal/handlers"
 	"go_server/internal/middleware"
 	"time"
 
@@ -13,5 +13,5 @@ func SetupAuthRoutes(app *fiber.App) {
 
 	authGroup := app.Group("/api/auth", middleware.TimeoutMiddleware(timeoutDuration))
 
-	authGroup.Post("/login", auth_handler.EmailLogin)
+	authGroup.Post("/emaillogin", handlers.EmailLogin)
 }

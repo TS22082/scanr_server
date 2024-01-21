@@ -1,5 +1,4 @@
-// Package user_handler provides handler functions for user-related operations.
-package user_handler
+package handlers
 
 import (
 	"bytes"
