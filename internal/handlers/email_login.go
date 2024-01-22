@@ -2,6 +2,7 @@ package handlers
 
 import (
 	msg_const "go_server/config/messages"
+	"go_server/config/types"
 	"go_server/internal/db"
 	"go_server/utils"
 
@@ -37,5 +38,12 @@ func EmailLogin(c *fiber.Ctx) error {
 		return utils.ErrorResponse(c, msg_const.ErrorGeneratingJWT, err)
 	}
 
-	return utils.SuccessResponse(c, msg_const.Success, token)
+	LoginUserSuccessResponse := &types.LoginUserSuccessResponse{
+		Email:    user.Email,
+		Username: user.Username,
+		ID:       user.ID.Hex(),
+		Token:    token,
+	}
+
+	return utils.SuccessResponse(c, msg_const.Success, LoginUserSuccessResponse)
 }
