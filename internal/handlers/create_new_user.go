@@ -102,10 +102,10 @@ func CreateNewUser(c *fiber.Ctx) error {
 
 	newRegisterToken.ID = oid
 
-	domain := os.Getenv("CLIENT_DOMAIN")
+	clientDomain := os.Getenv("CLIENT_DOMAIN")
 
 	templateData := types.TemplateData{
-		Domain: domain,
+		Domain: clientDomain,
 		Token:  newRegisterToken.ID.Hex(),
 	}
 
