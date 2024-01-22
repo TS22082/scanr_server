@@ -52,6 +52,7 @@ func CreateNewUser(c *fiber.Ctx) error {
 	newUser := &models.User{
 		Username:  data["username"],
 		Email:     data["email"],
+		Avatar:    "",
 		Verified:  false,
 		Password:  password,
 		CreatedAt: time.Now(),
