@@ -132,6 +132,23 @@ func GetUserByEmail(email string) (*models.User, error) {
 	return &user, nil
 }
 
+func GetUserById(id string) (*models.User, error) {
+	var user models.User
+
+	// Convert id to ObjectID
+	objId, err := primitive.ObjectIDFromHex(id)
+	if err != nil {
+		return nil, err
+	}
+
+	filter := bson.M{"_id": objId}
+	err = GetOne("users", filter).Decode(&user)
+	if err != nil {
+		return nil, err
+	}
+	return &user, nil
+}
+
 func UserExists(email string) (bool, error) {
 	var user models.User
 

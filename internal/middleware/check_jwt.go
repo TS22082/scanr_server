@@ -1,23 +1,25 @@
-package handlers
+package middleware
 
 import (
 	"go_server/config"
 	"go_server/utils"
 	"os"
+	"strings"
 
 	"github.com/dgrijalva/jwt-go"
 	"github.com/gofiber/fiber/v2"
 )
 
-func VerifyJWT(c *fiber.Ctx) error {
-	secret := os.Getenv("JWT_SECRET")
-	jwtToken := c.Params("jwt_token")
+func CheckJWT(c *fiber.Ctx) error {
+	authHeader := c.Get("Authorization")
+	tokenFromHeader := strings.TrimPrefix(authHeader, "Bearer ")
 
+	secret := os.Getenv("JWT_SECRET")
 	if secret == "" {
 		return utils.ErrorResponse(c, config.JWTNotSetMessage, nil)
 	}
 
-	token, err := jwt.Parse(jwtToken, func(token *jwt.Token) (interface{}, error) {
+	token, err := jwt.Parse(tokenFromHeader, func(token *jwt.Token) (interface{}, error) {
 		return []byte(secret), nil
 	})
 
@@ -26,12 +28,15 @@ func VerifyJWT(c *fiber.Ctx) error {
 	}
 
 	claims, ok := token.Claims.(jwt.MapClaims)
-
 	if !ok || !token.Valid {
 		return utils.ErrorResponse(c, config.InvalidJWT, nil)
 	}
 
-	userId := claims["userId"].(string)
+	userId, ok := claims["userId"].(string)
+	if !ok {
+		return utils.ErrorResponse(c, "User ID not found in token", nil)
+	}
 
-	return utils.SuccessResponse(c, config.Success, userId)
+	c.Locals("userId", userId)
+	return c.Next()
 }

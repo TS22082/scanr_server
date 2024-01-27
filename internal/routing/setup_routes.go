@@ -15,8 +15,9 @@ func SetupRoutes(app *fiber.App) {
 	user := app.Group("/api/user", middleware.TimeoutMiddleware(timeoutDuration))
 
 	auth.Post("/emaillogin", handlers.EmailLogin)
+
 	user.Post("/", handlers.CreateNewUser)
 	user.Post("/verify/:token", handlers.VerifyNewUser)
-
 	user.Get("verifyJWT/:jwt_token", handlers.VerifyJWT)
+	user.Get("/me", middleware.CheckJWT, handlers.GetMe)
 }
