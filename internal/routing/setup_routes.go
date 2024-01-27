@@ -17,4 +17,6 @@ func SetupRoutes(app *fiber.App) {
 	auth.Post("/emaillogin", handlers.EmailLogin)
 	user.Post("/", handlers.CreateNewUser)
 	user.Post("/verify/:token", handlers.VerifyNewUser)
+
+	user.Get("verifyJWT/:jwt_token", handlers.VerifyJWT)
 }

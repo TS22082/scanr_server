@@ -8,13 +8,14 @@ const (
 
 const (
 	DbName = "todo_db_golang"
-	// Collections
 	Users  = "users"
 	Tokens = "register_tokens"
 )
 
 const (
 	JWTNotSetMessage        = "jwt secret is not set in .env file"
+	ErrorParsingJWT         = "Error parsing JWT"
+	InvalidJWT              = "Invalid JWT"
 	RunningDevMode          = "Running in development mode."
 	EnvError                = "Error loading .env file, continuing without it"
 	SuccessfulVerification  = "User successfully registered"
