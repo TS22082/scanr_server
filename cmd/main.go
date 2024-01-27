@@ -2,7 +2,7 @@ package main
 
 import (
 	"go_server/internal/db"
-	router "go_server/internal/routing"
+	"go_server/internal/routing"
 	"log"
 	"os"
 
@@ -29,7 +29,7 @@ func main() {
 	// set up logging
 	app.Use(logger.New())
 	// Set up routes
-	router.SetupRoutes(app)
+	routing.SetupRoutes(app)
 	// Start the server
 	err = app.Listen(os.Getenv("PORT"))
 	if err != nil {

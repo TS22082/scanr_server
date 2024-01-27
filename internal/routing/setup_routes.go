@@ -1,4 +1,4 @@
-package router
+package routing
 
 import (
 	"go_server/internal/handlers"
