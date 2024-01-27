@@ -14,7 +14,7 @@ const (
 
 const (
 	JWTNotSetMessage        = "jwt secret is not set in .env file"
-	ErrorParsingJWT         = "Error parsing JWT"
+	ErrorParsingJWT         = "Error parsing JWT - likely expried or invalid"
 	InvalidJWT              = "Invalid JWT"
 	RunningDevMode          = "Running in development mode."
 	EnvError                = "Error loading .env file, continuing without it"
