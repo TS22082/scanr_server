@@ -2,8 +2,7 @@ package handlers
 
 import (
 	"bytes"
-	db_const "go_server/config/db"
-	msg_const "go_server/config/messages"
+	"go_server/config"
 	"go_server/config/types"
 	"go_server/internal/db"
 	"go_server/internal/models"
@@ -41,12 +40,12 @@ func CreateNewUser(c *fiber.Ctx) error {
 	var data map[string]string
 
 	if err := c.BodyParser(&data); err != nil {
-		return utils.ErrorResponse(c, msg_const.ErrorParsingBody, err)
+		return utils.ErrorResponse(c, config.ErrorParsingBody, err)
 	}
 
 	password, err := utils.HashPassword(data["password"])
 	if err != nil {
-		return utils.ErrorResponse(c, msg_const.PasswordHashingError, err)
+		return utils.ErrorResponse(c, config.PasswordHashingError, err)
 	}
 
 	newUser := &models.User{
@@ -62,24 +61,24 @@ func CreateNewUser(c *fiber.Ctx) error {
 	userAlreadyExists, err := db.UserExists(newUser.Email)
 	if err != nil {
 		// Handle other errors (e.g., database connection errors)
-		return utils.ErrorResponse(c, msg_const.ErrorCheckingUserExists, err)
+		return utils.ErrorResponse(c, config.ErrorCheckingUserExists, err)
 	}
 
 	if userAlreadyExists {
 		// Handle the case where the user already exists
-		return utils.ErrorResponse(c, msg_const.UserExistsError, nil)
+		return utils.ErrorResponse(c, config.UserExistsError, nil)
 	}
 
-	result, err := db.Create(db_const.Users, newUser)
+	result, err := db.Create(config.Users, newUser)
 
 	if err != nil {
-		return utils.ErrorResponse(c, msg_const.UserCreateFailed, err)
+		return utils.ErrorResponse(c, config.UserCreateFailed, err)
 	}
 
 	oid, ok := result.InsertedID.(primitive.ObjectID)
 
 	if !ok {
-		return utils.ErrorResponse(c, msg_const.ObjectAssertionError, nil)
+		return utils.ErrorResponse(c, config.ObjectAssertionError, nil)
 	}
 
 	newUser.ID = oid
@@ -90,14 +89,14 @@ func CreateNewUser(c *fiber.Ctx) error {
 		UpdatedAt: time.Now(),
 	}
 
-	result, err = db.Create(db_const.Tokens, newRegisterToken)
+	result, err = db.Create(config.Tokens, newRegisterToken)
 	if err != nil {
-		return utils.ErrorResponse(c, msg_const.TokenCreatedFailed, err)
+		return utils.ErrorResponse(c, config.TokenCreatedFailed, err)
 	}
 
 	oid, ok = result.InsertedID.(primitive.ObjectID)
 	if !ok {
-		return utils.ErrorResponse(c, msg_const.ObjectAssertionError, nil)
+		return utils.ErrorResponse(c, config.ObjectAssertionError, nil)
 	}
 
 	newRegisterToken.ID = oid
@@ -113,17 +112,17 @@ func CreateNewUser(c *fiber.Ctx) error {
 
 	template, err := template.ParseFiles(templatePath)
 	if err != nil {
-		return utils.ErrorResponse(c, msg_const.TemplateParseError, err)
+		return utils.ErrorResponse(c, config.TemplateParseError, err)
 	}
 
 	var emailBody bytes.Buffer
 
 	if err := template.Execute(&emailBody, templateData); err != nil {
-		return utils.ErrorResponse(c, msg_const.TemplateExecError, err)
+		return utils.ErrorResponse(c, config.TemplateExecError, err)
 	}
 
-	if err := utils.SendEmail(newUser.Email, msg_const.VerifyEmailSubject, emailBody.String()); err != nil {
-		return utils.ErrorResponse(c, msg_const.EmailSendError, err)
+	if err := utils.SendEmail(newUser.Email, config.VerifyEmailSubject, emailBody.String()); err != nil {
+		return utils.ErrorResponse(c, config.EmailSendError, err)
 	}
 
 	userSuccessResponse := types.UserSuccessResponse{
@@ -132,5 +131,5 @@ func CreateNewUser(c *fiber.Ctx) error {
 		ID:       newUser.ID.Hex(),
 	}
 
-	return utils.SuccessResponse(c, msg_const.UserCreateSuccess, userSuccessResponse)
+	return utils.SuccessResponse(c, config.UserCreateSuccess, userSuccessResponse)
 }

@@ -2,7 +2,7 @@ package utils
 
 import (
 	"errors"
-	msg_const "go_server/config/messages"
+	"go_server/config"
 	"os"
 	"time"
 
@@ -12,7 +12,7 @@ import (
 func CreateJWT(userId string) (string, error) {
 	secret := os.Getenv("JWT_SECRET")
 	if secret == "" {
-		return "", errors.New(msg_const.JWTNotSetMessage)
+		return "", errors.New(config.JWTNotSetMessage)
 	}
 
 	claims := jwt.MapClaims{}

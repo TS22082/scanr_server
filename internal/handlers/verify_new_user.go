@@ -1,8 +1,7 @@
 package handlers
 
 import (
-	db_const "go_server/config/db"
-	msg_const "go_server/config/messages"
+	"go_server/config"
 	"go_server/config/types"
 	"go_server/internal/db"
 
@@ -25,7 +24,7 @@ func VerifyNewUser(c *fiber.Ctx) error {
 	user, err := db.GetUserByToken(token)
 
 	if err != nil {
-		return utils.ErrorResponse(c, msg_const.UserNotFound, err)
+		return utils.ErrorResponse(c, config.UserNotFound, err)
 	}
 
 	userBSON := bson.M{
@@ -35,16 +34,16 @@ func VerifyNewUser(c *fiber.Ctx) error {
 
 	var userId = bson.M{"_id": user.ID}
 
-	_, err = db.UpdateOne(db_const.Users, userId, userBSON)
+	_, err = db.UpdateOne(config.Users, userId, userBSON)
 
 	if err != nil {
-		return utils.ErrorResponse(c, msg_const.UserUpdateFailed, err)
+		return utils.ErrorResponse(c, config.UserUpdateFailed, err)
 	}
 
-	_, err = db.DeleteOneById(db_const.Tokens, token)
+	_, err = db.DeleteOneById(config.Tokens, token)
 
 	if err != nil {
-		return utils.ErrorResponse(c, msg_const.TokenDeleteFailed, err)
+		return utils.ErrorResponse(c, config.TokenDeleteFailed, err)
 	}
 
 	userSuccessResponse := types.UserSuccessResponse{
@@ -53,5 +52,5 @@ func VerifyNewUser(c *fiber.Ctx) error {
 		ID:       user.ID.Hex(),
 	}
 
-	return utils.SuccessResponse(c, msg_const.SuccessfulVerification, userSuccessResponse)
+	return utils.SuccessResponse(c, config.SuccessfulVerification, userSuccessResponse)
 }

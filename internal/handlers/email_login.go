@@ -1,7 +1,7 @@
 package handlers
 
 import (
-	msg_const "go_server/config/messages"
+	"go_server/config"
 	"go_server/config/types"
 	"go_server/internal/db"
 	"go_server/utils"
@@ -13,29 +13,29 @@ func EmailLogin(c *fiber.Ctx) error {
 	var data map[string]string
 
 	if err := c.BodyParser(&data); err != nil {
-		return utils.ErrorResponse(c, msg_const.ErrorParsingBody, err)
+		return utils.ErrorResponse(c, config.ErrorParsingBody, err)
 	}
 
 	user, err := db.GetUserByEmail(data["email"])
 	if err != nil {
-		return utils.ErrorResponse(c, msg_const.ErrorGettingUser, err)
+		return utils.ErrorResponse(c, config.ErrorGettingUser, err)
 	}
 
 	if user == nil {
-		return utils.ErrorResponse(c, msg_const.UserDoesNotExist, nil)
+		return utils.ErrorResponse(c, config.UserDoesNotExist, nil)
 	}
 
 	if !user.Verified {
-		return utils.ErrorResponse(c, msg_const.UserNotVerified, nil)
+		return utils.ErrorResponse(c, config.UserNotVerified, nil)
 	}
 
 	if !utils.CheckPasswordHash(data["password"], user.Password) {
-		return utils.ErrorResponse(c, msg_const.InvalidCredentials, nil)
+		return utils.ErrorResponse(c, config.InvalidCredentials, nil)
 	}
 
 	token, err := utils.CreateJWT(user.ID.Hex())
 	if err != nil {
-		return utils.ErrorResponse(c, msg_const.ErrorGeneratingJWT, err)
+		return utils.ErrorResponse(c, config.ErrorGeneratingJWT, err)
 	}
 
 	LoginUserSuccessResponse := &types.LoginUserSuccessResponse{
@@ -45,5 +45,5 @@ func EmailLogin(c *fiber.Ctx) error {
 		Token:    token,
 	}
 
-	return utils.SuccessResponse(c, msg_const.Success, LoginUserSuccessResponse)
+	return utils.SuccessResponse(c, config.Success, LoginUserSuccessResponse)
 }

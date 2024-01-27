@@ -2,7 +2,7 @@ package db
 
 import (
 	"context"
-	db_const "go_server/config/db"
+	"go_server/config"
 	"go_server/internal/models"
 
 	"go.mongodb.org/mongo-driver/bson"
@@ -11,7 +11,7 @@ import (
 	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
-var DbName = db_const.DbName
+var DbName = config.DbName
 
 // GetCollection returns a reference to a MongoDB collection by its name.
 func GetCollection(collection string) *mongo.Collection {
@@ -104,14 +104,14 @@ func GetUserByToken(tokenId string) (*models.User, error) {
 
 	// Fetch the registration token
 	filter := bson.M{"_id": objTokenId}
-	err = GetOne(db_const.Tokens, filter).Decode(&register_token)
+	err = GetOne(config.Tokens, filter).Decode(&register_token)
 	if err != nil {
 		return nil, err
 	}
 
 	// Fetch the user using UserID from the registration token
 	filter = bson.M{"_id": register_token.UserID}
-	err = GetOne(db_const.Users, filter).Decode(&user)
+	err = GetOne(config.Users, filter).Decode(&user)
 	if err != nil {
 		return nil, err
 	}
