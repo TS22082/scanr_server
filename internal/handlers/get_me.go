@@ -2,6 +2,7 @@ package handlers
 
 import (
 	"go_server/config"
+	"go_server/config/types"
 	"go_server/internal/db"
 	"go_server/utils"
 
@@ -16,5 +17,11 @@ func GetMe(c *fiber.Ctx) error {
 		return utils.ErrorResponse(c, config.ErrorGettingUser, err)
 	}
 
-	return utils.SuccessResponse(c, config.Success, user)
+	responseWithUser := types.UserSuccessResponse{
+		Username: user.Username,
+		Avatar:   user.Avatar,
+		Email:    user.Email,
+		ID:       user.ID.Hex(),
+	}
+	return utils.SuccessResponse(c, config.Success, responseWithUser)
 }
