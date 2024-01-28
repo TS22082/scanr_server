@@ -60,12 +60,10 @@ func CreateNewUser(c *fiber.Ctx) error {
 
 	userAlreadyExists, err := db.UserExists(newUser.Email)
 	if err != nil {
-		// Handle other errors (e.g., database connection errors)
 		return utils.ErrorResponse(c, config.ErrorCheckingUserExists, err)
 	}
 
 	if userAlreadyExists {
-		// Handle the case where the user already exists
 		return utils.ErrorResponse(c, config.UserExistsError, nil)
 	}
 
