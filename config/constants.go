@@ -7,9 +7,10 @@ const (
 )
 
 const (
-	DbName = "todo_db_golang"
-	Users  = "users"
-	Tokens = "register_tokens"
+	DbName      = "todo_db_golang"
+	Users       = "users"
+	Tokens      = "register_tokens"
+	EmailTokens = "email_tokens"
 )
 
 const (
