@@ -35,22 +35,27 @@ import (
 //
 // Returns:
 // - Returns a Fiber error, if any, during the processing of the request.
+type CreateUserReqData struct {
+	Username string `json:"username"`
+	Email    string `json:"email"`
+	Password string `json:"password"`
+}
 
 func CreateNewUser(c *fiber.Ctx) error {
-	var data map[string]string
+	var data CreateUserReqData
 
 	if err := c.BodyParser(&data); err != nil {
 		return utils.ErrorResponse(c, config.ErrorParsingBody, err)
 	}
 
-	password, err := utils.HashPassword(data["password"])
+	password, err := utils.HashPassword(data.Password)
 	if err != nil {
 		return utils.ErrorResponse(c, config.PasswordHashingError, err)
 	}
 
 	newUser := &models.User{
-		Username:  data["username"],
-		Email:     data["email"],
+		Username:  data.Username,
+		Email:     data.Email,
 		Avatar:    "",
 		Verified:  false,
 		Password:  password,

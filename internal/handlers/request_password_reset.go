@@ -16,16 +16,18 @@ import (
 	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
+type RequestPasswordResetReqData struct {
+	Email string `json:"email"`
+}
+
 func RequestPasswordReset(c *fiber.Ctx) error {
-	var data = make(map[string]string)
+	var data RequestPasswordResetReqData
 
 	if err := c.BodyParser(&data); err != nil {
 		return utils.ErrorResponse(c, config.ErrorParsingBody, err)
 	}
 
-	email := data["email"]
-
-	user, err := db.GetUserByEmail(email)
+	user, err := db.GetUserByEmail(data.Email)
 
 	if err != nil {
 		return utils.ErrorResponse(c, config.UserNotFound, err)
