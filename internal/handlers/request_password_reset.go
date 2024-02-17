@@ -46,6 +46,10 @@ func RequestPasswordReset(c *fiber.Ctx) error {
 
 	oid, ok := result.InsertedID.(primitive.ObjectID)
 
+	if !ok {
+		return utils.ErrorResponse(c, config.ObjectAssertionError, nil)
+	}
+
 	EmailToken.ID = oid
 
 	clientDomain := os.Getenv("CLIENT_DOMAIN")
