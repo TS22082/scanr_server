@@ -10,6 +10,7 @@ import (
 )
 
 func GetMe(c *fiber.Ctx) error {
+
 	userId := c.Locals("userId").(string)
 	user, err := db.GetUserById(userId)
 

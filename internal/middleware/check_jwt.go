@@ -1,6 +1,7 @@
 package middleware
 
 import (
+	"fmt"
 	"go_server/config"
 	"go_server/utils"
 	"os"
@@ -24,6 +25,7 @@ func CheckJWT(c *fiber.Ctx) error {
 	})
 
 	if err != nil {
+		fmt.Println("Problem here?", err)
 		return utils.ErrorResponse(c, config.ErrorParsingJWT, err)
 	}
 
