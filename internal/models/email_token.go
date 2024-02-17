@@ -18,7 +18,7 @@ import (
 	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
-type Email_Token struct {
+type EmailToken struct {
 	ID        primitive.ObjectID `bson:"_id,omitempty" json:"id"`
 	Email     string             `bson:"email,omitempty" json:"email"`
 	CreatedAt time.Time          `bson:"createdAt,omitempty" json:"createdAt"`

@@ -31,7 +31,7 @@ func RequestPasswordReset(c *fiber.Ctx) error {
 		return utils.ErrorResponse(c, config.UserNotFound, err)
 	}
 
-	EmailToken := &models.Email_Token{
+	EmailToken := &models.EmailToken{
 		Email:     user.Email,
 		CreatedAt: time.Now(),
 		UpdatedAt: time.Now(),
