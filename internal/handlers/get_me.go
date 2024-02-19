@@ -23,7 +23,6 @@ func GetMe(c *fiber.Ctx) error {
 		Avatar:   user.Avatar,
 		Email:    user.Email,
 		ID:       user.ID.Hex(),
-		Verified: user.Verified,
 	}
 
 	return utils.SuccessResponse(c, config.Success, responseWithUser)

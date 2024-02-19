@@ -5,5 +5,4 @@ type UserSuccessResponse struct {
 	Avatar   string `json:"avatar"`
 	Email    string `json:"email"`
 	ID       string `json:"id"`
-	Verified bool   `json:"verified"`
 }
