@@ -11,7 +11,9 @@ import (
 )
 
 func CheckJWT(c *fiber.Ctx) error {
+
 	authHeader := c.Get("Authorization")
+
 	tokenFromHeader := strings.TrimPrefix(authHeader, "Bearer ")
 
 	secret := os.Getenv("JWT_SECRET")

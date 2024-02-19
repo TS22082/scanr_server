@@ -22,6 +22,6 @@ func SetupRoutes(app *fiber.App) {
 	user.Post("/verify/:token", handlers.VerifyNewUser)
 	user.Post("/password_reset/:token", handlers.ResetPassword)
 	user.Post("/request_password_reset", handlers.RequestPasswordReset)
-	user.Get("verifyJWT/:jwt_token", handlers.VerifyJWT)
+	user.Get("/verifyJWT/:jwt_token", handlers.VerifyJWT)
 	user.Get("/me", middleware.CheckJWT, handlers.GetMe)
 }

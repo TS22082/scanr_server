@@ -17,6 +17,7 @@ func EmailLogin(c *fiber.Ctx) error {
 	}
 
 	user, err := db.GetUserByEmail(data["email"])
+
 	if err != nil {
 		return utils.ErrorResponse(c, config.ErrorGettingUser, err)
 	}
