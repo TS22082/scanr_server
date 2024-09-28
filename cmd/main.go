@@ -27,11 +27,13 @@ func main() {
 	app.Use(logger.New())
 	routing.SetupRoutes(app)
 
+	// Start server
 	err = app.Listen(os.Getenv("PORT"))
 	if err != nil {
 		log.Fatal(err)
 	}
 
+	// Shutdown server
 	err = app.Shutdown()
 	if err != nil {
 		log.Fatal(err)
